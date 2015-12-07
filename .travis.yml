@@ -23,14 +23,14 @@ addons:
             - zlib1g-dev
             - libcurl4-gnutls-dev
             - libpcre3-dev
-  coverity_scan:
-    project:
-      name: "ph4r05/PJSIP"
-      description: "Build submitted by Travis CI"
-    notification_email: ph4r05@gmail.com
-    build_command_prepend: ./configure && make dep
-    build_command:  make
-    branch_pattern: coverity_scan
+    coverity_scan:
+        project:
+            name: "ph4r05/PJSIP"
+            description: "Build submitted by Travis CI"
+        notification_email: ph4r05@gmail.com
+        build_command_prepend: ./configure && make dep
+        build_command:  make
+        branch_pattern: coverity_scan
 
 script: ./configure && make dep && make
 
