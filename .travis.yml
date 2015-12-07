@@ -1,0 +1,22 @@
+language: c
+compiler: gcc
+sudo: false
+
+addons:
+    apt:
+        packages:
+            - flex
+            - bison
+            - libsqlite3-dev
+            - libsctp-dev
+            - openssl
+            - libssl-dev
+            - libxml2-dev
+            - libpq-dev
+            - zlib1g-dev
+            - libcurl4-gnutls-dev
+            - libpcre3-dev
+
+script: ./configure && make dep && make
+
+
