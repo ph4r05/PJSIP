@@ -2,6 +2,12 @@ language: c
 compiler: gcc
 sudo: false
 
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "fM5/AJJ3lrWHL0TU2faU0tA/8aPEyU+sZhk9fE5zsM2ZgOarBmR5oIF7C5MB47Dmxvz96NqfaKNd9LgMR4n5OB7tRHQ3SWtONZjZp8wnWHayaWb6KG+Sknk7IYm0a8x4xlBXirJE5J1UIyRcaicYKzav0h23cplAcc/3evF8USriZRp1SBD4zURw2zK+oFwUpZQgXu1vPpoUIFVgsGED1Az+Ya+Rc6Nq73a6gVnsonn+6NK/dLY5npafYVTnlFAYcqc9sjmtadhLL9836L7ZDX2OucZm9lCiSCAy1HtQu6Xe3ihgFxpDMIDWmcvk/5sBHurMogFzPgHCzIpY+K2uxj7Ix+MHkodkQNygAfpDE5muG6vGyNFXYFUYXtuVD+lMw1/OzVUUjiMMAHNhESncrH8QENI+NbGbqtybZaP+IGhu+UMSlAt9Zods0tTC30bmD4ts46tQRB2e+mr3XKyNWeWrzhZlK1UE1ge6smfKn/9MHgosfrP0sfMG91qnV8gGR/+lSvt5yA4Wb+2lS9QyZ48wWAkESZh8QftDLb89op6+n15N6lkP+iGF32WY0KbJtYjk1JKiPId3pvyIcNDq9NiV6aMghxwV+eV02JcMJV0sCyhfrNgP9aY3McnP684LCHZ2F0mnq1vPckY4+Vm3kq18Q7xZM2+2w6o3Xce9Cx4="
+
 addons:
     apt:
         packages:
@@ -17,6 +23,14 @@ addons:
             - zlib1g-dev
             - libcurl4-gnutls-dev
             - libpcre3-dev
+  coverity_scan:
+    project:
+      name: "ph4r05/PJSIP"
+      description: "Build submitted by Travis CI"
+    notification_email: ph4r05@gmail.com
+    build_command_prepend: ./configure && make dep
+    build_command:  make
+    branch_pattern: coverity_scan
 
 script: ./configure && make dep && make
 
