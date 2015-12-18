@@ -314,7 +314,7 @@ PJ_DEF(pj_status_t) pjsip_tls_transport_start2( pjsip_endpoint *endpt,
     int af, sip_ssl_method;
     pj_uint32_t sip_ssl_proto;
     struct tls_listener *listener;
-    pj_ssl_sock_param ssock_param;
+    pj_ssl_sock_param ssock_param, newsock_param;
     pj_sockaddr *listener_addr;
     pj_bool_t has_listener;
     pj_status_t status;
@@ -375,8 +375,6 @@ PJ_DEF(pj_status_t) pjsip_tls_transport_start2( pjsip_endpoint *endpt,
     pj_ssl_sock_param_default(&ssock_param);
     ssock_param.sock_af = af;
     ssock_param.cb.on_accept_complete = &on_accept_complete;
-    ssock_param.cb.on_data_read = &on_data_read;
-    ssock_param.cb.on_data_sent = &on_data_sent;
     ssock_param.async_cnt = async_cnt;
     ssock_param.ioqueue = pjsip_endpt_get_ioqueue(endpt);
     ssock_param.require_client_cert = listener->tls_setting.require_client_cert;
@@ -473,9 +471,14 @@ PJ_DEF(pj_status_t) pjsip_tls_transport_start2( pjsip_endpoint *endpt,
      */
     has_listener = PJ_FALSE;
 
-    status = pj_ssl_sock_start_accept(listener->ssock, pool, 
+    pj_memcpy(&newsock_param, &ssock_param, sizeof(newsock_param));
+    newsock_param.async_cnt = 1;
+    newsock_param.cb.on_data_read = &on_data_read;
+    newsock_param.cb.on_data_sent = &on_data_sent;
+    status = pj_ssl_sock_start_accept2(listener->ssock, pool, 
 			  (pj_sockaddr_t*)listener_addr, 
-			  pj_sockaddr_get_len((pj_sockaddr_t*)listener_addr));
+			  pj_sockaddr_get_len((pj_sockaddr_t*)listener_addr),
+			  &newsock_param);
     if (status == PJ_SUCCESS || status == PJ_EPENDING) {
 	pj_ssl_sock_info info;
 	has_listener = PJ_TRUE;
